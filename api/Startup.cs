@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using service;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace api
 {
@@ -28,7 +33,16 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+            // Add inmemory database
+            services.AddDbContext<StudentContext>(opt => opt.UseInMemoryDatabase());
+            // Add services
+            services.AddScoped<StudentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +50,9 @@ namespace api
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            // Add initialize data
+            AppInitializer.Initialize(app.ApplicationServices);
 
             app.UseMvc();
         }

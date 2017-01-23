@@ -6,10 +6,10 @@ namespace data
 {
     public class AppInitializer
     {
-        private static AppContext _context;
+        private static StudentContext _context;
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            _context = (AppContext)serviceProvider.GetService(typeof(AppContext));
+            _context = (StudentContext)serviceProvider.GetService(typeof(StudentContext));
             InitializeData();
         }
         private static void InitializeData()
@@ -101,7 +101,7 @@ namespace data
                 },
                 new Enrollment
                 {
-                    StudentID = 2,
+                    StudentID = 3,
                     CourseID = 2,
                     Grade = Grade.B
                 }
