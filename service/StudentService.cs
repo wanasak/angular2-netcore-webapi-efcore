@@ -18,14 +18,15 @@ namespace service
         public IEnumerable<Student> GetStuednts()
         {
             return _context.Students
-                .OrderBy(s => s.StudentID)
+                .OrderBy(s => s.StudentId)
                 .ToList();
         }
         public Student GetStudent(int studentID)
         {
             return _context.Students
                 .Include(s => s.Enrollments)
-                .FirstOrDefault(s => s.StudentID == studentID);
+                    .ThenInclude(e => e.Course)
+                .FirstOrDefault(s => s.StudentId == studentID);
         }
         public void CreateStudent(Student student)
         {
@@ -35,12 +36,13 @@ namespace service
                 Major = student.Major,
                 Year = student.Year
             };
+
             _context.Students.Add(_student);
             _context.SaveChanges();
         }
         public void UpdateStudent(Student student)
         {
-            Student _student = _context.Students.Find(student.StudentID);
+            Student _student = _context.Students.Find(student.StudentId);
             if (_student != null)
             {
                 _student.Name = student.Name;
@@ -51,16 +53,16 @@ namespace service
 
                 foreach (var enrollment in student.Enrollments)
                 {
-                    _student.Enrollments.Add(new Enrollment { StudentID = student.StudentID, CourseID = enrollment.CourseID });
+                    _student.Enrollments.Add(new Enrollment { StudentId = student.StudentId, CourseId = enrollment.CourseId });
                 }
 
                 _context.Students.Update(_student);
-                _context.SaveChanges();   
+                _context.SaveChanges();
             }
-        }   
+        }
         public void DeleteStudent(int studentID)
         {
-            Student _student = new Student { StudentID = 1 };
+            Student _student = new Student { StudentId = 1 };
             _context.Students.Remove(_student);
             _context.SaveChanges();
         }
