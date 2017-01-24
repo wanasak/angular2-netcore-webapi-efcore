@@ -6,9 +6,10 @@ You've created a new ASP.NET Core project. [Learn what's new](https://go.microso
 
 ## This application consists of:
 
-*   Sample pages using ASP.NET Core MVC
-*   [Bower](https://go.microsoft.com/fwlink/?LinkId=518004) for managing client-side libraries
-*   Theming using [Bootstrap](https://go.microsoft.com/fwlink/?LinkID=398939)
+*   ASP.NET Core Web Api
+*   Angular 2
+*   xUnit
+*   Entity Framework Core
 
 ## How to
 
