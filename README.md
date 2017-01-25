@@ -16,7 +16,7 @@ You've created a new ASP.NET Core project. [Learn what's new](https://go.microso
 
 Visual Studio Code
 
-*   [Restore all folder]
-*   [Run the app in the api folder]
+*   Restore all folder
+*   Run the app in the api folder
 
-I would love to hear your [feedback](u510610433@gmail.com)
+I would love to hear your feedback
