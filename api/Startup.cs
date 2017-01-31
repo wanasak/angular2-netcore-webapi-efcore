@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using service;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace api
 {
@@ -32,6 +31,9 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string sqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            bool useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -40,9 +42,21 @@ namespace api
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
             // Add inmemory database
-            services.AddDbContext<StudentContext>(opt => opt.UseInMemoryDatabase());
+            // services.AddDbContext<StudentContext>(opt => opt.UseInMemoryDatabase());
+            services.AddDbContext<StudentContext>(opt =>
+            {
+                switch (useInMemoryProvider)
+                {
+                    case true:
+                        opt.UseInMemoryDatabase();
+                        break;
+                    default:
+                        opt.UseSqlServer(sqlConnectionString, b => b.MigrationsAssembly("api"));
+                        break;
+                }
+            });
             // Add services
-            services.AddScoped<StudentService>();
+            services.AddScoped<IStudentService, StudentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,10 +65,35 @@ namespace api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // Add initialize data
-            AppInitializer.Initialize(app.ApplicationServices);
+            // Add mvc to the request pipeline
+            app.UseCors(builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+
+            // Add exception handler
+            app.UseExceptionHandler(
+              builder =>
+              {
+                  builder.Run(
+                    async context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if (error != null)
+                        {
+                            context.Response.AddApplicationError(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
+                        }
+                    });
+              });
 
             app.UseMvc();
+
+            // Add initialize data
+            AppInitializer.Initialize(app.ApplicationServices);
         }
     }
 }

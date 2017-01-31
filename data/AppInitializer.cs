@@ -41,9 +41,25 @@ namespace data
                 Major = "Account",
                 Year = 3
             };
+            var student4 = new Student
+            {
+                StudentId = 4,
+                Name = "Ron",
+                Major = "Medicine",
+                Year = 2
+            };
+            var student5 = new Student
+            {
+                StudentId = 5,
+                Name = "David",
+                Major = "Economis",
+                Year = 4
+            };
             _context.Students.Add(student1);
             _context.Students.Add(student2);
             _context.Students.Add(student3);
+            _context.Students.Add(student4);
+            _context.Students.Add(student5);
             _context.SaveChanges();
         }
         private static void InitializeCourse()

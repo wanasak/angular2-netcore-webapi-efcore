@@ -1,0 +1,59 @@
+<div>
+    <h3>Student List</h3>
+    <div class="resource">
+        <!--<nav class="navbar navbar-light bg-faded">
+            <form class="form-inline">
+                <input #searchStudent class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </nav>-->
+
+        <!--<button (click)="onClickAddStudent()" type="button" class="btn btn-link">Add Student</button>-->
+        <a class="btn btn-default" routerLink="/student/add" role="button">Add Student</a>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Major</th>
+                    <th>Year</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td>{{ student.studentId }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.major }}</td>
+                    <td>{{ student.year }}</td>
+                    <td>
+                        <button (click)="onClickDetailStudent(student)" type="button" class="btn btn-link">Detail</button>                        |
+                        <button (click)="onClickDeleteStudent(student)" type="button" class="btn btn-link">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div bsModal #childConfirmModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Confirmation</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete {{ selectedStudent.name }} ?
+            </div>
+            <div class="modal-footer">
+                <button (click)="onClickConfirmDeleteStudent()" type="button" class="btn btn-large btn-block btn-danger">Yes</button>
+                <button (click)="hideChildModal()" type="button" class="btn btn-large btn-block btn-default">No</button>
+            </div>
+        </div>
+    </div>
+</div>

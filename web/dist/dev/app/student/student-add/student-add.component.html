@@ -1,0 +1,31 @@
+<div>
+    <h3>Add Student</h3>
+    <div class="resource">
+        
+        <!--<a class="btn btn-default" routerLink="/student" role="button">Back</a>-->
+        
+        <form [formGroup]="studentForm">
+            <!--<legend>Form title</legend>-->
+        
+            <div class="form-group">
+                <label for="">Name</label>
+                <input formControlName="name" type="text" class="form-control" id="" placeholder="Name">
+            </div>
+        
+            <div class="form-group">
+                <label for="">Major</label>
+                <input formControlName="major" type="text" class="form-control" id="" placeholder="Major">
+            </div>
+
+            <div class="form-group">
+                <label for="">Year</label>
+                <input formControlName="year" type="number" min="1" max="8" class="form-control" id="" placeholder="Year">
+            </div>
+        
+            <button [disabled]="!studentForm.valid" (click)="submitAddStudent()" type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-default" routerLink="/student" role="button">Back</a>
+        </form>
+        
+        
+    </div>
+</div>

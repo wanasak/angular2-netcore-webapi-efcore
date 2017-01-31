@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace service
 {
-    public class StudentService
+    public class StudentService : IStudentService
     {
         public readonly StudentContext _context;
 
@@ -30,8 +30,9 @@ namespace service
         }
         public void CreateStudent(Student student)
         {
-            var _student = new Student
+            Student _student = new Student
             {
+                // StudentId = _context.Students.Count() + 1,
                 Name = student.Name,
                 Major = student.Major,
                 Year = student.Year
@@ -62,7 +63,7 @@ namespace service
         }
         public void DeleteStudent(int studentID)
         {
-            Student _student = new Student { StudentId = 1 };
+            Student _student = new Student { StudentId = studentID };
             _context.Students.Remove(_student);
             _context.SaveChanges();
         }
