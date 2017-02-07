@@ -1,4 +1,4 @@
-# Welcome to student application (in progress)
+# Student Application (in progress)
 
 ...
 
