@@ -1,4 +1,4 @@
-# Welcome to ASP.NET Core
+# Welcome to student application (in progress)
 
 ...
 
